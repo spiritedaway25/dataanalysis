@@ -1,0 +1,255 @@
+---
+title: "Benefits and Risks of Correlations in Decision Making Using R for Analysis"
+author: "Chihiro Sato (400924769)"
+date: "2025-12-10"
+format: revealjs
+editor: visual
+---
+
+## 
+
+```{r}
+if (!require(pacman)) install.packages("pacman")
+pacman::p_unload(all)
+pacman::p_load(tidyverse, janitor, datarium, GGally, ppcor, corrplot, qgraph)
+library(datarium)
+library(tidyverse)
+library(GGally)
+library(ppcor)
+library(corrplot)
+library(qgraph)
+data("marketing")
+data("airquality")
+library(ppcor)
+```
+
+## 
+
+Before we start, please visit my GitHub via QR code or link
+
+-   https://github.com/spiritedaway25/dataanalysis.git
+
+-   github username -\> spiritedaway25
+
+    ![QRcode](images/QRcode.png){width="50%"}
+
+## Agenda
+
+-   What is correlation?
+-   Benefits of using correlations
+-   Risks of using correlations
+-   Benefits and risks of using R
+-   Example 1: Benefit
+-   Example 2: Risk
+-   Exercise
+
+## What is Correlation?
+
+-   A statistical measure that shows how strongly and in which way two or more variables are related.
+-   Example: “temperature and ice cream sales,” “disposable income and expenditure for luxury items,” or “customer services and customer complaints”
+
+## Correlation coefficients
+
+-   Ranging from -1 to +1
+-   **Pearson** measures the strength of a linear relationship between two continuous variables
+-   **Spearman** measures the strength of a monotonic relationship, which can be linear or curved. It uses ranks to calculate
+-   **Kendall** measures the strength of dependence between two variables, also for ordinal data. 
+
+## 
+
+| Feature      | Pearson               | Spearman                  |
+|--------------|-----------------------|---------------------------|
+| Relationship | Linear                | Monotonic (linear or not) |
+| Data type    | Continuous            | Continuous or ordinal     |
+| Outliers     | Sensitive             | Robust                    |
+| Normality    | Assumes approx normal | No strict assumption      |
+
+: Comparison between Pearson and Spearman
+
+## Role of correlations in decision-making
+
+-   When making decisions, humans have limited cognitive capacity, incomplete information, and face uncertainty.
+-   In business or research, correlation helps us understand which factors might influence outcomes. A high correlation suggests a strong relationship, which can guide decisions.
+
+**why use R?** - R is a programming language specialized for statistical analysis. It makes correlation analysis and visualization (graphs) easy. Using R will make your desicion-making more convincing.
+
+## Benefits of using correlations
+
+-   **Identifying Relationships**: Correlation analysis helps identify how two variables are interconnected.
+
+-   **Prediction and Forecasting**: Based on the relationship identified through past correlations, you can make predictions and correlations about future outcomes.
+
+-   **Strategy Optimization**: Analyzing historical data allows you to understand which initiatives have been most effective and enables you to formulate strategies accordingly.
+
+-   **Resource Allocation**: By understanding past effective and efficient practices, you can focus on impactful variables.
+
+## Risks of using correlations
+
+-   **Correlation Is Not Causation**: Just because two variables are correlated, it does not mean one causes the other; Misinterpretation can lead to wrong decisions.
+
+-   **External Factors**: It is necessary to consider external influences (or seasonal trends) that might impact the observed relationship between variables.
+
+-   **False Correlations**: Random data which actually have no relationship may accidentally look meaningful and lead you to wrong conclusions.
+
+## Benefits and risks of using R
+
+#### Benefits of using R
+
+-   Powerful statistical capabilities
+
+-   Extensive package ecosystem
+
+-   Strong data visualization capabilities
+
+#### **Risks of using R**
+
+-   Correlation ≠ Causation
+
+-   Complexity for non-experts
+
+-   False sense of precision
+
+## Example 1: Benefit
+
+### dataset "marketing"
+
+```{r}
+data(marketing)
+head(marketing)
+```
+
+## Correlation 4x4 matrix (Pearson = linear relationship)
+
+```{r}
+#| echo: true
+M <- cor(marketing, use = "pairwise.complete.obs", method = "pearson")
+round(M, 3)
+```
+
+## Correlation between two specific variables
+
+```{r}
+#| echo: true
+cor(marketing$youtube, marketing$sales)
+cor.test(marketing$youtube, marketing$sales)
+```
+
+## Spearman alternative = monotonic relationship
+
+```{r}
+#| echo: true
+M_s <- cor(marketing, use = "pairwise.complete.obs", method = "spearman")
+round(M_s, 3)
+```
+
+## Visualization (heatmap)
+
+```{r}
+#| echo: true
+corrplot(M, method = "color", addCoef.col = "black", tl.col = "black")
+```
+
+## Visualization (Scatterplot)
+
+```{r}
+#| echo: true
+pairs(marketing, main = "Scatterplot Matrix")
+```
+
+## Example 2: Risk
+
+### dataset "airquality"
+
+```{r}
+data("airquality")
+head(airquality)
+```
+
+```{r}
+#| echo: true
+aq <- na.omit(airquality[, c("Ozone", "Solar.R", "Temp")])
+```
+
+## Naive correlation (Ozone vs Solar.R)
+
+```{r}
+#| echo: true
+cor(aq$Ozone, aq$Solar.R)
+r_naive <- cor(aq$Ozone, aq$Solar.R)
+```
+
+## Visualization of naive correlation
+
+```{r}
+#| echo: true
+plot(aq$Solar.R, aq$Ozone,
+     pch = 19, col = "blue",
+     xlab = "Solar Radiation",
+     ylab = "Ozone",
+     main = "Naive correlation: r = 0.35")
+abline(lm(Ozone ~ Solar.R, data = aq), col = "blue", lwd = 2)
+```
+
+## Partial correlation using ppcor
+
+```{r}
+#| echo: true
+library(ppcor)
+pcor.test(x = aq$Ozone, y = aq$Solar.R, z = aq["Temp"])
+pc <- pcor.test(x = aq$Ozone, y = aq$Solar.R, z = aq["Temp"])
+```
+
+## Visualization of partial correlation
+
+```{r}
+#| echo: true
+plot(residuals(lm(Solar.R ~ Temp, data = aq)),
+    residuals(lm(Ozone ~ Temp, data = aq)),
+    pch = 19, col = "red",
+    xlab = "Solar.R residuals",
+    ylab = "Ozone residuals",
+    main = "Partial: r = 0.21")
+abline(lm(residuals(lm(Ozone ~ Temp, data = aq)) ~ residuals(lm(Solar.R ~ Temp, data = aq))) , 
+            col = "red", lwd = 2) 
+```
+
+## Exercise
+
+```{r}
+#| echo: true
+data(anscombe)
+head(anscombe)
+```
+
+1.  Calculate the correlation for each pair
+2.  Plot the data
+
+## Possible Solution
+
+1.  Calculate the correlation for each pair
+
+    ```{r}
+    #| echo: true
+    B <- cor(anscombe, use = "pairwise.complete.obs", method = "pearson")
+    round(B, 3)
+    ```
+
+## 
+
+2.  Plot the data
+
+```{r}
+#| echo: true
+par(mfrow = c(2, 2))
+plot(anscombe$x1, anscombe$y1, main = "Dataset 1", pch = 19)
+abline(lm(y1 ~ x1, data = anscombe), col = "red")
+
+plot(anscombe$x2, anscombe$y2, main = "Dataset 2", pch = 19)
+abline(lm(y2 ~ x2, data = anscombe), col = "red")
+
+plot(anscombe$x3, anscombe$y3, main = "Dataset 3", pch = 19)
+abline(lm(y3 ~ x3, data = anscombe), col = "red")
+
+plot(anscombe$x4, anscombe$y4, main = "Dataset 4", pch = 19)
+abline(lm(y4 ~ x4, data = anscombe), col = "red")
+```

@@ -1,0 +1,217 @@
+---
+title: "Benefits and Risks of Correlations in Decision Making Using R for Analysis"
+
+
+author:
+    - name: "Chihiro Sato (400924769)"
+      email: sato.chihiro@stud.hs-fresenius.de
+      affiliations: Fresenius University of Applied Science
+      address: Im Mediapark 4c
+      city: Cologne
+      region: NRW
+      postal-code: 50670
+      id: temple
+
+      corresponding: true
+
+abstract: "This handout examines the role of correlation analysis in business decision-making and research, with a particular focus on implementation using R. While correlations can help identify relationships between variables and support predictive insights, they may also lead to misleading conclusions due to various factors such as the distinction between correlation and causation. Using two practical examples and corresponding datasets, I demonstrate how correlation analysis can inform business decisions and how confounding factors can distort interpretations. Additionally, the paper introduces key R functions for computing correlations and visualizing results, aiming to provide a practical guide for analysts and decision-makers.
+
+Keywords: correlation analysis, business decision-making, cor()"
+
+floatsintext: true
+wordcount-banner: true
+filters:
+  - wordcount
+  
+format:
+  apaquarto-pdf:
+    documentmode: stu
+    course: Data Science and Data Analytics  (WS 2025/26)
+    professor: Prof. Dr. Stephan Huber
+    duedate: '2025-12-10'
+    keep-tex: false
+    fig-align: "left"
+    include-in-header:
+      text: |
+        \linespread{1.5}
+        <!-- This equals 1.5 linespacing in Word -->
+  apaquarto-html:
+    toc: true
+    embed-resources: true
+
+
+a4paper: true
+
+bibliography: literatur.bib
+
+reference-location: document
+number-sections: true
+---
+
+Word count: {{wordcount}}
+
+# Correlation
+
+## What Is Correlation?
+
+Correlation is a statistical measure that indicates how strongly and in which way two or more variables are related. The correlation coefficient demonstrates the strength and direction of a relationship, ranging from -1 to +1 (see @JMPStatisticalDiscovery2025):
+
+-   **+1:** Perfect positive correlation (as one variable increases, the other increases proportionally)
+-   **0:** No correlation (no linear relationship between the variables)
+-   **-1:** Perfect negative correlation (as one variable increases, the other decreases proportionally)
+
+There are three major types of correlation coefficients: Pearson, Spearman, and Kendall, each with distinct characteristics. Pearson correlation is the most commonly used statistic to measure the degree of relationship between linearly related variables. If (a) the variables are continuous, (b) the relationship between the variables is approximately linear, and (c) there are no extreme outliers, valid results can be ensured using Pearson correlation. If the relationship between variables is non-linear, Spearman correlation can be used to determine the strength and direction of monotonic relationships. It can be applied to either continuous or ordinal data and is relatively robust to outliers. Kendall's correlation is a non-parametric measure suitable for exploring relationships between two ordinal variables (see @Brideau2025 and @bishara2012testing).
+
+@tbl-letters below illustrates key differences between Pearson and Spearman correlations:
+
+| Feature      | Pearson               | Spearman                  |
+|--------------|-----------------------|---------------------------|
+| Relationship | Linear                | Monotonic (linear or not) |
+| Data type    | Continuous            | Continuous or ordinal     |
+| Outliers     | Sensitive             | Robust                    |
+| Normality    | Assumes approx normal | No strict assumption      |
+
+: Comparison between Pearson and Spearman {#tbl-letters}
+
+## Role of Correlations in decision making
+
+When making decisions, humans operate with limited cognitive capacity, incomplete information, and constant uncertainty (@simon1979rational). In business or research contexts, correlation can help identify which factors may influence outcomes. A strong correlation indicates a significant relationship, providing valuable guidance for decision-making.
+
+## Benefits of Using Correlations
+
+Using correlations in decision making gives you many advantages.Below is several examples:
+
+-   **Identifying relationships:** Correlation analysis reveals how two variables are interconnected.
+-   **Prediction and forecasting:** Based on the relationship identified through past correlations, you can make predictions and correlations about future outcomes.
+-   **Strategy optimization:** Analyzing historical data allows you to understand which initiatives have been most effective and enables you to formulate strategies accordingly.
+-   **Resource allocation:** Understanding which variables have the greatest impact allows you to allocate resources more efficiently. past effective and efficient practices, you can focus on impactful variables.
+-   **Risk management:** Recognizing correlations among variables helps you to prepare for and mitigate potential risks.
+
+see @Rinehart2023
+
+## Risks of Using Correlations
+
+While correlations can simplify understanding relationships between variables, they also come with certain risks.:
+
+-   **Correlation is not causation:** Just because two variables are correlated, it does not mean one causes the other; Misinterpretation can lead to wrong decisions.
+-   **External factors:** It is necessary to consider external influences (or seasonal trends) that might impact the observed relationship between variables.
+-   **Data quality & quantity:** Meaningful correlations require sufficient, high-quality data; otherwise, conclusions may be inaccurate.
+-   **False correlations:** Random data which actually have no relationship may accidentally look meaningful and lead you to wrong conclusions.
+-   **Non-linear relationships:** You may not be able to identify correlation when relationships are not linear.
+
+see @Rinehart2023
+
+## Benefits and Risks of Using R
+
+While correlations offer significant advantages and some potential drawbacks in decision-making, leveraging R for correlation analysis can maximize their potential:
+
+**Benefits of using R:**
+
+-   **R has a powerful statistical and data visualization capabilities:** R is designed for statistical analysis and data visualization. With advanced packages such as corrr, ggplot2, and caret, it simplifies the process of calculating, visualizing, and interpreting correlations.
+
+-   **Extensive package ecosystem:** R offers access to over 20,000 packages, ensuring that whatever data analysis task you need, there’s likely an R package available to support it.
+
+-   **Transparency and reproducibility:** R maintains a clear code history, making it easy to track which analysis methods were used and allowing immediate reproduction of results for validation and collaboration.
+
+-   **Integration with predictive modeling**
+
+**Risks of using R:**
+
+-   **Correlation ≠ causation:** While R can effectively identify correlations between variables, it does not establish causality. Misinterpreting correlation as causation can lead to flawed decisions.
+
+-   **Complexity for non-experts:** R requires a solid understanding of statistics and programming. Misuse of functions or misinterpretation of outputs can result in incorrect conclusions.
+
+-   **False sense of precision**
+
+
+see @Githiora2025
+
+| Package | Function | Use |
+|-------------------|-------------------|----------------------------------|
+| graphics | Pairs plot | Scatterplot matrix |
+| `GGally` | GGally | Scatterplot matrix |
+| corrplot | corrplot | Heatmap |
+| ggraph | ggraph | Network graph of correlations |
+| graphics | barplot | Bar plot of correlation with target variable |
+| ggcorrplot | ggcorrplot | Correlogram, a polished alternative to corrplot |
+| plotly, heatmaply | plotly, heatmaply | Interactive visualization |
+
+: Useful functions for visualization {#tbl-letter}
+
+@tbl-letter shows functions useful for visualization of correlations in R
+
+# Example Case
+
+## Example 1: Benefit
+
+We will examine the benefits and risks of using correlations in decision-making through example cases. For illustrating the benefits, we will use the “marketing” dataset.
+
+```{r}
+#| include: false
+if (!require(pacman)) install.packages("pacman")
+pacman::p_unload(all)
+pacman::p_load(tidyverse, janitor, datarium, GGally, ppcor, corrplot, qgraph)
+
+library(datarium)
+library(tidyverse)
+library(GGally)
+library(ppcor)
+library(corrplot)
+library(qgraph)
+```
+
+```{r}
+#| echo: true
+data("marketing")
+head(marketing)
+```
+
+Below are example functions for calculating correlations based on the Pearson linear relationship.
+
+```{r}
+#| echo: true
+cor(marketing$youtube, marketing$sales)
+cor.test(marketing$youtube, marketing$sales)
+```
+
+```{r}
+#| echo: true
+M <- cor(marketing, use = "pairwise.complete.obs", method = "pearson")
+round(M, 3)
+```
+
+For Spearman correlation coefficient, you can simply select Spearman as below:
+
+```{r}
+#| echo: true
+M_s <- cor(marketing, use = "pairwise.complete.obs", method = "spearman")
+round(M_s, 3)
+```
+
+## Example 2: Risk
+
+We will demonstrate an example where an external factor influences two variables, creating the appearance of a correlation between them.
+
+```{r}
+#| echo: true
+data("airquality")
+aq <- na.omit(airquality[, c("Ozone", "Solar.R", "Temp")])
+```
+
+To remove the impact of an external factor (i.e., temperature), the following function can be used:
+
+```{r}
+#| echo: true
+library(ppcor)
+pcor.test(x = aq$Ozone, y = aq$Solar.R, z = aq["Temp"])
+pc <- pcor.test(x = aq$Ozone, y = aq$Solar.R, z = aq["Temp"])
+```
+
+# References
+
+::: {#refs}
+:::
+
+# Affidavit
+
+I hereby affirm that this submitted paper was authored unaided and solely by me. Additionally, no other sources than those in the reference list were used. Parts of this paper, including tables and figures, that have been taken either verbatim or analogously from other works have in each case been properly cited with regard to their origin and authorship. This paper either in parts or in its entirety, be it in the same or similar form, has not been submitted to any other examination board and has not been published. I acknowledge that the university may use plagiarism detection software to check my thesis. I agree to cooperate with any investigation of suspected plagiarism and to provide any additional information or evidence requested by the university.

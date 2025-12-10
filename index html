@@ -36,9 +36,9 @@
         <p>View or download the handout.</p>
         <div class="btns">
           <!-- If files are in /docs, use href="docs/handout.html" and "docs/handout.pdf" -->
-          handout.htmlOpen HTML</a>
-          handout.pdfOpen PDF</a>
-          handout.qmdDownload QMD</a>
+          Handout.htmlOpen HTML</a>
+          Handout.pdfOpen PDF</a>
+          Handout.qmdDownload QMD</a>
         </div>
       </div>
 
@@ -47,9 +47,9 @@
         <p>Slides as HTML/PDF; source QMD included.</p>
         <div class="btns">
           <!-- If files are in /slides, use href="slides/presentation.html" and "slides/presentation.pdf" -->
-          presentation.htmlOpen HTML</a>
-          presentation.pdfOpen PDF</a>
-          presentation.qmdDownload QMD</a>
+          Presentation.htmlOpen HTML</a>
+          Presentation.pdfOpen PDF</a>
+          Presentation.qmdDownload QMD</a>
         </div>
       </div>
 

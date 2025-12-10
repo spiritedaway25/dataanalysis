@@ -1,0 +1,70 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data Analysis – Resources</title>
+  <style>
+    :root { --bg:#0f172a; --card:#111827; --text:#e5e7eb; --muted:#9ca3af; --accent:#38bdf8; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial; background:var(--bg); color:var(--text); }
+    .wrap { max-width:860px; margin:0 auto; padding:40px 20px; }
+    header { text-align:center; margin-bottom:30px; }
+    header h1 { font-size:2rem; margin:0 0 8px; }
+    header p { margin:0; color:var(--muted); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; }
+    .card { background:var(--card); border:1px solid #1f2937; border-radius:12px; padding:16px; }
+    .card h2 { font-size:1.1rem; margin:0 0 8px; }
+    .card p { margin:0 0 12px; color:var(--muted); }
+    .btns { display:flex; flex-wrap:wrap; gap:8px; }
+    a.btn { display:inline-block; text-decoration:none; background:#1f2937; color:var(--text); border:1px solid #374151; padding:8px 12px; border-radius:8px; font-size:0.95rem; }
+    a.btn:hover { border-color:var(--accent); color:#fff; }
+    footer { margin-top:32px; text-align:center; color:var(--muted); font-size:0.9rem; }
+    code { background:#0b1220; border:1px solid #1f2937; padding:2px 6px; border-radius:6px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Data Analysis – Resources</h1>
+      <p>Quick access to handout and presentation files (HTML, PDF & QMD).</p>
+    </header>
+
+    <section class="grid">
+      <div class="card">
+        <h2>Handout</h2>
+        <p>View or download the handout.</p>
+        <div class="btns">
+          <!-- If files are in /docs, use href="docs/handout.html" and "docs/handout.pdf" -->
+          handout.htmlOpen HTML</a>
+          handout.pdfOpen PDF</a>
+          handout.qmdDownload QMD</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Presentation</h2>
+        <p>Slides as HTML/PDF; source QMD included.</p>
+        <div class="btns">
+          <!-- If files are in /slides, use href="slides/presentation.html" and "slides/presentation.pdf" -->
+          presentation.htmlOpen HTML</a>
+          presentation.pdfOpen PDF</a>
+          presentation.qmdDownload QMD</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Repository</h2>
+        <p>Browse the source code and assets.</p>
+        <div class="btns">
+          <a class="btn" href="https://github.com/spiritedaway25" target="_blank" rel="noopener">Open on GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>Place this <code>index.html</code> where your files live, or update its links.</p>
+    </footer>
+  </div>
+</body>
+</html>
